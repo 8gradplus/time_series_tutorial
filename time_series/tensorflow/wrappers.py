@@ -9,7 +9,8 @@ def compile_and_fit(model,
                     epochs=100,
                     optimizer=tf.keras.optimizers.SGD(lr=1e-6, momentum=0.9),
                     callbacks: list = [],
-                    metrics: list = []):
+                    metrics: list = [],
+                    verbose=0):
     """"Compiles and fits model. Prints model summary and returns learning history"""
 
     model.compile(loss=loss,
@@ -20,7 +21,7 @@ def compile_and_fit(model,
 
     history = model.fit(train_data, epochs=epochs,
                         validation_data=validation_data,
-                        verbose=0,
+                        verbose=verbose,
                         callbacks=callbacks)
     return history
 

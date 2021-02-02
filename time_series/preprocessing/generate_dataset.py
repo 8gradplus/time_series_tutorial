@@ -1,25 +1,10 @@
 from pandas import DataFrame
 import tensorflow as tf
 from tensorflow.data import Dataset
+from time_series.entities import Offsets
+import logging
 
-
-class Offsets:
-    """Define relevant offsets for time series"""
-    def __init__(self,
-                 input_width: int,
-                 label_width: int,
-                 shift: int = None):
-        self.input_width = input_width
-        self.label_width = label_width
-        self.shift = shift
-        if not shift:
-            self.shift = self.label_width
-        self.sequence_width = self.input_width + self.shift
-        self.check()
-
-    def check(self):
-        msg = "Label width needs to be smaller than offset in order to make future predictions"
-        assert self.label_width <= self.shift, msg
+logger = logging.getLogger(__name__)
 
 
 class MakeDatasetFromDataFrame:
@@ -71,7 +56,7 @@ def get_label_indices(df: DataFrame, labels: list):
 
 
 class PickLabels:
-    """Pick only those columns of tensor as labels which are spezified by label indices"""
+    """Pick only those columns of tensor as labels which are specified by label indices"""
 
     def __init__(self, label_indices: list):
         self.label_indices = label_indices
@@ -91,5 +76,3 @@ class BatchWindow:
 
     def __call__(self, window: Dataset):
         return window.batch(self.sequence_width)
-
-
